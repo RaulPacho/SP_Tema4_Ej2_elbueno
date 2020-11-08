@@ -22,6 +22,8 @@ namespace SP_Tema4_Ej2_elbueno
 
         private void button1_Click(object sender, EventArgs e)
         {
+            textBox1.Text = "";
+            label1.Text = "";
             Process[] procs = Process.GetProcesses();
             textBox1.Text += String.Format("{0,-10}|{1,-20}|{2,20}\r\n", "PID", "Name", "Main Window");
 
@@ -87,6 +89,7 @@ namespace SP_Tema4_Ej2_elbueno
 
         private void button3_Click(object sender, EventArgs e)
         {
+            label1.Text = "";
             if (int.TryParse(textBox2.Text, out int pid))
             {
                 try
@@ -124,6 +127,10 @@ namespace SP_Tema4_Ej2_elbueno
                     textBox1.Text = "";
                     label1.Text = "Didn't find PID";
                 }
+                catch (Win32Exception)
+                {
+                    label1.Text = "You though you have privileges?\r\nNo You don't!";
+                }
             }
             else
             {
@@ -136,13 +143,20 @@ namespace SP_Tema4_Ej2_elbueno
         {
             string solProc = textBox2.Text;
             label1.Text = "";
-            try
+            if (solProc != "")
             {
-                Process p = Process.Start(solProc);
+                try
+                {
+                    Process p = Process.Start(solProc);
+                }
+                catch (Win32Exception)
+                {
+                    label1.Text = "Not a valid process";
+                }
             }
-            catch (Win32Exception)
+            else
             {
-                label1.Text = "Not a valid process";
+                label1.Text = "You didn't even write";
             }
         }
     }
